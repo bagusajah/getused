@@ -1,0 +1,578 @@
+global:
+  scrape_interval:     15s
+#  scrape_timeout:      30s 
+  evaluation_interval: 15s
+
+  external_labels:
+    monitor: 'codelab-monitor'
+
+rule_files:
+  - 'prometheus.rules'
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+#    scrape_timeout: 30s
+    static_configs:
+      - targets: ['localhost:9090']
+
+#################
+# Node Exporter #
+#################
+
+  - job_name: 'blackbox-icmp'                                                                                                                                                                      
+    scrape_interval: 5s                                                                                                                                                                       
+    metrics_path: /probe                                                                                                                                                                      
+    params:                                                                                                                                                                                   
+      module: [icmp] #ping                                                                                                                                                                    
+    static_configs:                                                                                                                                                                           
+      - targets: ['172.16.10.102']                                                                                                                                                            
+        labels:                                                                                                                                                                               
+          group: 'env Prod'                                                                                                                                                                   
+      - targets: ['172.16.50.135']                                           
+        labels:                                                                                                                                                                               
+          group: 'env Stage' 
+      - targets: ['172.16.80.100','172.16.80.101']                                           
+        labels:                                                                                                                                                                               
+          group: 'Database' 
+    relabel_configs:                                                                                                                                                                          
+      - source_labels: [__address__]                                                                                                                                                          
+        regex: (.*)(:80)?                                                                                                                                                                     
+        target_label: __param_target                                                                                                                                                          
+        replacement: ${1}                                                                                                                                                                     
+      - source_labels: [__param_target]                                                                                                                                                       
+        regex: (.*)                                                                                                                                                                           
+        target_label: instance                                                                                                                                                                
+        replacement: ${1}                                                                                                                                                                     
+      - source_labels: []                                                                                                                                                                     
+        regex: .*                                                                                                                                                                             
+        target_label: __address__                                                                                                                                                             
+        replacement: 127.0.0.1:9115
+
+  - job_name:       'radon.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.164:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'scandium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.102:9100']
+        labels:
+          group: 'production'
+
+  - job_name:	   'xenon.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.134:9100']
+        labels:
+          group: 'production'
+
+
+  - job_name:       'titanium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.103:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'vanadium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.104:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'chromium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.105:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'manganese.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.106:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'iron.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.107:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'nickel.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.109:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'zinc.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.111:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'yttrium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.112:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'technetium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.114:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'ruthenium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.115:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'mysql'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.164:9104']
+        labels:
+          group: 'production_database'
+
+  - job_name:       'palladium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.117:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'cadmium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.122:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'nobelium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.151:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'antimony.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.170:9100']
+        labels:
+          group: 'production'
+
+  - job_name:       'meitnerium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.108:9100']
+        labels:
+          group: 'production'
+
+  - job_name:	'lawrencium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.132:9100']
+        labels:
+          group: 'production'
+
+  - job_name:	'copper.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.110:9100']
+        labels:
+          group: 'production'
+
+  - job_name:   'lutetium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.123:9100']
+        labels:
+          group: 'production'
+
+  - job_name:   'rhodium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.116:9100']
+        labels:
+          group: 'production'
+
+  - job_name:	'niobium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.118:9100']
+        labels:
+          group: 'production'
+
+  - job_name:	'molybdenum.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.119:9100']
+        labels:
+          group: 'production'
+
+  - job_name:	'argon.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.155:9100']
+        labels:
+          group: 'production'
+
+  - job_name:	'livermorium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.157:9100']
+        labels:
+          group: 'production'
+
+  - job_name:	'iridium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.160:9100']
+        labels:
+          group: 'production'
+
+  - job_name:	'actinium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.162:9100']
+        labels:
+          group: 'production'
+
+  - job_name:	'sms-gemilang.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.201:9100']
+        labels:
+          group: 'production'
+
+  - job_name:	'thorium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.158:9100']
+        labels:
+          group: 'production'
+
+  - job_name:   'hydrogen.staging.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.50.134:9100']
+        labels:
+          group: 'staging'
+
+  - job_name:   'lithium.staging.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.50.135:9100']
+        labels:
+          group: 'staging'
+
+  - job_name:   'berylium.staging.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.50.136:9100']
+        labels:
+          group: 'staging'
+
+  - job_name:   'sodium.staging.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.50.137:9100']
+        labels:
+          group: 'staging'
+
+  - job_name:   'magnesium.staging.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.50.138:9100']
+        labels:
+          group: 'staging'
+
+  - job_name:   'potassium.staging.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.50.139:9100']
+        labels:
+          group: 'staging'
+
+  - job_name:   'strontium.staging.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.50.140:9100']
+        labels:
+          group: 'staging'
+
+  - job_name:   'rubidium.staging.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.50.141:9100']
+        labels:
+          group: 'staging'
+
+  - job_name:   'francium.staging.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.50.142:9100']
+        labels:
+          group: 'staging'
+
+####################
+# HAProxy Exporter #
+####################
+
+  - job_name:   'haproxy-scandium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.102:9101']
+        labels:
+          group: 'haproxy-loadbalancer'
+
+  - job_name:   'haproxy-iron.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.107:9101']
+        labels:
+          group: 'haproxy-loadbalancer'
+
+  - job_name:   'haproxy-nickel.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.109:9101']
+        labels:
+          group: 'haproxy-loadbalancer'
+
+  - job_name:   'haproxy-rhodium.truemoney.co.id'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['172.16.10.116:9101']
+        labels:
+          group: 'haproxy-loadbalancer'
+
+#####################
+# Blackbox Exporter #
+#####################
+
+  - job_name:       'API-Bimasakti'
+    scrape_interval: 60s
+    scheme: 'http'
+    metrics_path: '/probe'
+    params:
+      module: ['api_bimasakti']
+      target: ['http://172.16.10.102:8080/APIBimasakti/prepaid/pulsa']
+    static_configs:
+      - targets: ['blackbox-exporter:9115']
+        labels:
+          group: 'api-meitnerium'
+
+  - job_name:       'API-Alto'
+    scrape_interval: 60s
+    scheme: 'http'
+    metrics_path: '/probe'
+    params: 
+      module: ['api_alto']
+      target: ['http://172.16.10.102:8080/APIAltoTransfer/status']
+    static_configs:
+      - targets: ['blackbox-exporter:9115']
+        labels:
+          group: 'api-meitnerium'
+
+  - job_name:       'API-EDC'
+    scrape_interval: 60s
+    scheme: 'http'
+    metrics_path: '/probe'
+    params:
+      module: ['api_edc']
+      target: ['http://172.16.10.102:8080/APIEDC/parsingJSON.jsp']
+    static_configs:
+      - targets: ['blackbox-exporter:9115']
+        labels:
+          group: 'api-titanium'
+
+  - job_name:       'API-WEB'
+    scrape_interval: 60s
+    scheme: 'http'
+    metrics_path: '/probe'
+    params:
+      module: ['api_web']
+      target: ['http://172.16.10.102:8080/api_web_app/parsingJSON.jsp']
+    static_configs:
+      - targets: ['blackbox-exporter:9115']
+        labels:
+          group: 'api-titanium'
+
+  - job_name:       'API-Samsung'
+    scrape_interval: 60s
+    scrape_timeout:  59s
+    scheme: 'http'
+    metrics_path: '/probe'
+    params:
+      module: ['api_samsung']
+      target: ['http://api.samsung.truemoney.co.id/']
+    static_configs:
+      - targets: ['blackbox-exporter:9115']
+        labels:
+          group: 'api-yttrium'
+
+  - job_name:       'API-SalesDealer'
+    scrape_interval: 60s
+    scheme: 'http'
+    metrics_path: '/probe'
+    params:
+      module: ['api_salesdealer']
+      target: ['http://172.16.10.102:8080/API_AndroidSalesDealer/parsingJSON.jsp']
+    static_configs:
+      - targets: ['blackbox-exporter:9115']
+        labels:
+          group: 'api-titanium'
+
+  - job_name:       'API-Android'
+    scrape_interval: 60s
+    scheme: 'http'
+    metrics_path: '/probe'
+    params:
+      module: ['api_android']
+      target: ['http://172.16.10.102:8080/Android/gakenkrip']
+    static_configs:
+      - targets: ['blackbox-exporter:9115']
+        labels:
+          group: 'api-titanium'
+
+  - job_name:       'API-ChangeStatus'
+    scrape_interval: 60s
+    scheme: 'http'
+    metrics_path: '/probe'
+    params:
+      module: ['api_changestatus']
+      target: ['http://172.16.10.102:8080/APIChangeStatus/failed']
+    static_configs:
+      - targets: ['blackbox-exporter:9115']
+        labels:
+          group: 'api-titanium'
+
+  - job_name:       'API-GCM'
+    scrape_interval: 60s
+    scrape_timeout:  59s
+    scheme: 'http'
+    metrics_path: '/probe'
+    params:
+      module: ['api_gcm']
+      target: ['http://172.16.10.102:8080/api_gcm/sent/new']
+    static_configs:
+      - targets: ['blackbox-exporter:9115']
+        labels:
+          group: 'api-vanadium'
+
+  - job_name:       'API-AndroidSales'
+    scrape_interval: 60s
+    scheme: 'http'
+    metrics_path: '/probe'
+    params:
+      module: ['api_andoridsales']
+      target: ['http://172.16.10.102:8080/API_AndroidSales/parsingJSON.jsp']
+    static_configs:
+      - targets: ['blackbox-exporter:9115']
+        labels:
+          group: 'api-titanium'
+
+  - job_name:       'API-C2C-Send'
+    scrape_interval: 60s
+    scheme: 'http'
+    metrics_path: '/probe'
+    params:
+      module: ['api_cash2cash_kirim']
+      target: ['http://172.16.10.102:8080/APIEDC/cash2cash/inq/kirim']
+    static_configs:
+      - targets: ['blackbox-exporter:9115']
+        labels:
+          group: 'api-titanium'
+
+  - job_name:       'API-C2C-Receive'
+    scrape_interval: 60s
+    scheme: 'http'
+    metrics_path: '/probe'
+    params:
+      module: ['api_cash2cash_terima']
+      target: ['http://172.16.10.102:8080/api-cash2cash/inq/terima']
+    static_configs:
+      - targets: ['blackbox-exporter:9115']
+        labels:
+          group: 'api-titanium'
+
+################
+# Trx Exporter #
+################
+
+  - job_name:   'trx.truemoney.co.id'
+    scrape_interval: 60s
+    metrics_path: '/'
+    static_configs:
+      - targets: ['trx-exporter:9981']
+        labels:
+          group: 'trx-monitoring'
+
+  - job_name:   'remit.truemoney.co.id'
+    scrape_interval: 60s
+    metrics_path: '/'
+    static_configs:
+      - targets: ['trxremit:9982']
+        labels:
+          group:  'remit-monitoring'
+          
+#####################
+# Cadvisor Exporter #
+#####################
+
+  - job_name:   'stg135-api.truemoney.co.id'
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['172.16.50.135:9911']
+        labels:
+          group: 'container'
+
+  - job_name:   'stg136-api.truemoney.co.id'
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['172.16.50.136:9911']
+        labels:
+          group: 'container'
+
+  - job_name:   'stg137-api.truemoney.co.id'
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['172.16.50.137:9911']
+        labels:
+          group: 'container'
+
+  - job_name:   'stg138-api.truemoney.co.id'
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['172.16.50.138:9911']
+        labels:
+          group: 'container'
+
+  - job_name:   'stg142-api.truemoney.co.id'
+    scrape_interval: 10s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['172.16.50.142:9911']
+        labels:
+          group: 'container'
+
